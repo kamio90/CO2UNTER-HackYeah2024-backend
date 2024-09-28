@@ -7,14 +7,19 @@ import {importParksData} from "./applicaiton/services/park-service";
 import {importSmallParksData} from "./applicaiton/services/small-park-service";
 import smallParks from "./api/routes/small-parks";
 import {importUsersData} from "./applicaiton/services/user-service";
+import user from "./api/routes/user";
+import bodyParser from "body-parser";
 
 const app = express();
 const port = 3000;
 
 app.use(cors())
+app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.json());
 
 app.use('/data', townParks);
 app.use('/data', smallParks);
+app.use('/data', user);
 app.use(errorHandler);
 connectToDb().then(async () => {
     app.listen(port, () => {
