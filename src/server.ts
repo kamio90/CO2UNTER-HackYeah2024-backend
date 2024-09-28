@@ -9,6 +9,8 @@ import smallParks from "./api/routes/small-parks";
 import {importUsersData} from "./applicaiton/services/user-service";
 import user from "./api/routes/user";
 import bodyParser from "body-parser";
+import serviceSector from "./api/routes/service-sector";
+import event from "./api/routes/event";
 
 const app = express();
 const port = 3000;
@@ -20,6 +22,8 @@ app.use(bodyParser.json());
 app.use('/data', townParks);
 app.use('/data', smallParks);
 app.use('/data', user);
+app.use("/data", serviceSector);
+app.use("/data", event);
 app.use(errorHandler);
 connectToDb().then(async () => {
     app.listen(port, () => {
