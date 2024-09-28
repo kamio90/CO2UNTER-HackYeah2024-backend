@@ -1,0 +1,1 @@
+- otwarte dane krakow: https://otwartedane.um.krakow.pl/zbiory-danych
