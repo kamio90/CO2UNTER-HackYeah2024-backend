@@ -1,0 +1,1 @@
+- [ ] dodac w taki sam sposob jak wczesniejsze rzeczy do data 
