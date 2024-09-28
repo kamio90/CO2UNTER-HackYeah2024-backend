@@ -15,7 +15,7 @@ const UserSchema: Schema = new Schema({
     fuelType: {type: String, required: true},
     passengers: {type: Number, required: true},
     vehicleType: {type: String, required: true},
-    typeOfMeal: {type: String, required: true},
+    typeOfMeal: {type: String, required: false},
 });
 
 export default mongoose.model<IUser>('User', UserSchema);
