@@ -1,1 +1,2 @@
 - otwarte dane krakow: https://otwartedane.um.krakow.pl/zbiory-danych
+- stan jakosci powietrza: https://ztp.krakow.pl/sct/stan-jakosci-powietrza

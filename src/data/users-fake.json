@@ -1,0 +1,212 @@
+[
+  {
+    "averageConsumption": "17",
+    "distance": "900",
+    "fuelType": "diesel",
+    "passengers": "2",
+    "vehicleType": "osobowy"
+  },
+  {
+    "averageConsumption": "13",
+    "distance": "1500",
+    "fuelType": "gasoline",
+    "passengers": "3",
+    "vehicleType": "osobowy"
+  },
+  {
+    "averageConsumption": "15",
+    "distance": "900",
+    "fuelType": "gasoline",
+    "passengers": "1",
+    "vehicleType": "suv"
+  },
+  {
+    "averageConsumption": "18",
+    "distance": "500",
+    "fuelType": "diesel",
+    "passengers": "2",
+    "vehicleType": "minivan"
+  },
+  {
+    "averageConsumption": "16",
+    "distance": "900",
+    "fuelType": "electric",
+    "passengers": "1",
+    "vehicleType": "suv"
+  },
+  {
+    "averageConsumption": "17",
+    "distance": "600",
+    "fuelType": "diesel",
+    "passengers": "4",
+    "vehicleType": "osobowy"
+  },
+  {
+    "averageConsumption": "20",
+    "distance": "2000",
+    "fuelType": "gasoline",
+    "passengers": "1",
+    "vehicleType": "pickup"
+  },
+  {
+    "averageConsumption": "19",
+    "distance": "800",
+    "fuelType": "gasoline",
+    "passengers": "2",
+    "vehicleType": "suv"
+  },
+  {
+    "averageConsumption": "21",
+    "distance": "600",
+    "fuelType": "gasoline",
+    "passengers": "3",
+    "vehicleType": "minivan"
+  },
+  {
+    "averageConsumption": "18",
+    "distance": "1400",
+    "fuelType": "electric",
+    "passengers": "1",
+    "vehicleType": "osobowy"
+  },
+  {
+    "averageConsumption": "20",
+    "distance": "1000",
+    "fuelType": "diesel",
+    "passengers": "2",
+    "vehicleType": "pickup"
+  },
+  {
+    "averageConsumption": "22",
+    "distance": "1500",
+    "fuelType": "gasoline",
+    "passengers": "1",
+    "vehicleType": "osobowy"
+  },
+  {
+    "averageConsumption": "16",
+    "distance": "1300",
+    "fuelType": "gasoline",
+    "passengers": "4",
+    "vehicleType": "suv"
+  },
+  {
+    "averageConsumption": "18",
+    "distance": "1100",
+    "fuelType": "diesel",
+    "passengers": "3",
+    "vehicleType": "osobowy"
+  },
+  {
+    "averageConsumption": "15",
+    "distance": "800",
+    "fuelType": "electric",
+    "passengers": "1",
+    "vehicleType": "pickup"
+  },
+  {
+    "averageConsumption": "21",
+    "distance": "500",
+    "fuelType": "diesel",
+    "passengers": "2",
+    "vehicleType": "osobowy"
+  },
+  {
+    "averageConsumption": "19",
+    "distance": "1400",
+    "fuelType": "gasoline",
+    "passengers": "4",
+    "vehicleType": "suv"
+  },
+  {
+    "averageConsumption": "22",
+    "distance": "1600",
+    "fuelType": "diesel",
+    "passengers": "3",
+    "vehicleType": "pickup"
+  },
+  {
+    "averageConsumption": "16",
+    "distance": "1200",
+    "fuelType": "gasoline",
+    "passengers": "2",
+    "vehicleType": "suv"
+  },
+  {
+    "averageConsumption": "21",
+    "distance": "1200",
+    "fuelType": "electric",
+    "passengers": "1",
+    "vehicleType": "osobowy"
+  },
+  {
+    "averageConsumption": "20",
+    "distance": "1300",
+    "fuelType": "diesel",
+    "passengers": "3",
+    "vehicleType": "pickup"
+  },
+  {
+    "averageConsumption": "19",
+    "distance": "700",
+    "fuelType": "gasoline",
+    "passengers": "4",
+    "vehicleType": "suv"
+  },
+  {
+    "averageConsumption": "15",
+    "distance": "900",
+    "fuelType": "diesel",
+    "passengers": "2",
+    "vehicleType": "minivan"
+  },
+  {
+    "averageConsumption": "16",
+    "distance": "1100",
+    "fuelType": "gasoline",
+    "passengers": "3",
+    "vehicleType": "osobowy"
+  },
+  {
+    "averageConsumption": "17",
+    "distance": "1000",
+    "fuelType": "diesel",
+    "passengers": "4",
+    "vehicleType": "pickup"
+  },
+  {
+    "averageConsumption": "21",
+    "distance": "1500",
+    "fuelType": "gasoline",
+    "passengers": "1",
+    "vehicleType": "osobowy"
+  },
+  {
+    "averageConsumption": "18",
+    "distance": "1600",
+    "fuelType": "electric",
+    "passengers": "3",
+    "vehicleType": "suv"
+  },
+  {
+    "averageConsumption": "22",
+    "distance": "700",
+    "fuelType": "diesel",
+    "passengers": "4",
+    "vehicleType": "pickup"
+  },
+  {
+    "averageConsumption": "15",
+    "distance": "1500",
+    "fuelType": "gasoline",
+    "passengers": "1",
+    "vehicleType": "minivan"
+  },
+  {
+    "averageConsumption": "19",
+    "distance": "1200",
+    "fuelType": "diesel",
+    "passengers": "2",
+    "vehicleType": "osobowy"
+  }
+]

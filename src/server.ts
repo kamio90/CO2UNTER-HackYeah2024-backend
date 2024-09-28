@@ -1,13 +1,17 @@
 import express from 'express';
+import cors from 'cors';
 import {connectToDb} from "./infra/mongo-connection";
 import errorHandler from "./infra/error-handler";
 import townParks from "./api/routes/town-parks";
 import {importParksData} from "./applicaiton/services/park-service";
 import {importSmallParksData} from "./applicaiton/services/small-park-service";
 import smallParks from "./api/routes/small-parks";
+import {importUsersData} from "./applicaiton/services/user-service";
 
 const app = express();
 const port = 3000;
+
+app.use(cors())
 
 app.use('/data', townParks);
 app.use('/data', smallParks);
@@ -27,5 +31,11 @@ connectToDb().then(async () => {
         console.log('Successfully imported small parks data');
     } catch (err) {
         console.log(`An error occurred while importing small parks data: ${err}`);
+    }
+    try {
+        await importUsersData();
+        console.log('Successfully imported users data');
+    } catch (err) {
+        console.log(`An error occurred while importing users data: ${err}`);
     }
 });
