@@ -60,6 +60,7 @@ router.post('/users/:id/actions', async (req: Request, res: Response) => {
             user.fuelType = req.body.fuelType;
             user.passengers = req.body.passengers;
             user.vehicleType = req.body.vehicleType;
+            user.typeOfMeal = req.body.typeOfMeal;
 
             await user.save();
 
