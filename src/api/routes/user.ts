@@ -1,6 +1,6 @@
 import express, {Request, Response} from 'express';
 import User, {IUser} from "../../domain/models/User";
-import {calculateEmission} from "../../applicaiton/services/calculator-service";
+import {calculateUserEmission} from "../../applicaiton/services/calculator-service";
 
 const router = express.Router();
 
@@ -109,7 +109,7 @@ router.post('/users/:id/actions/calculate', async (req: Request, res: Response) 
         if (!user) {
             res.status(404).send('User not found');
         } else {
-            return calculateEmission(user);
+            return calculateUserEmission(user);
         }
 
     } catch (err) {

@@ -1,6 +1,7 @@
 import {IUser} from "../../domain/models/User";
 import Park from "../../domain/models/Park";
 import SmalPark from "../../domain/models/SmallPark";
+import {IEvent} from "../../domain/models/Event";
 
 type FuelEmission = {
     fuelType: string;
@@ -80,7 +81,7 @@ function createTransportData(carEmission: number, publicTransportEmission: numbe
     return {carEmission, publicTransportEmission, bicycleEmission};
 }
 
-export async function calculateEmission(user: IUser): Promise<any> {
+export async function calculateUserEmission(user: IUser): Promise<any> {
     const dayMap = new Map<string, number>();
     dayMap.set("day", 365);
     dayMap.set("week", 52);
@@ -104,6 +105,27 @@ export async function calculateEmission(user: IUser): Promise<any> {
         return createEmissionData(number, "No park can sustain your CO2 emission", Math.ceil(number / trees["sadzonka"]),
             Math.ceil(number / trees["drzewoL"]), Math.ceil(number / trees["drzewoI"]),
             Math.ceil(number / trees["stareDrzewoL"]), Math.ceil(number / trees["stareDrzewoI"]));
+    }
+}
+
+export async function calculateEventEmission(event: IEvent) {
+    const emission = event.emissions;
+    const parks = await Park.find({consumptionCO: {$lte: emission}}).exec();
+    const smallParks = await SmalPark.find({consumptionCO: {$lte: emission}}).exec();
+    const trees = createTreeDictionary();
+    if (parks) {
+        return createEmissionData(emission, parks[0].name, Math.ceil(emission / trees["sadzonka"]),
+            Math.ceil(emission / trees["drzewoL"]), Math.ceil(emission / trees["drzewoI"]),
+            Math.ceil(emission / trees["stareDrzewoL"]), Math.ceil(emission / trees["stareDrzewoI"]));
+    }
+    if (smallParks) {
+        return createEmissionData(emission, smallParks[0].name, Math.ceil(emission / trees["sadzonka"]),
+            Math.ceil(emission / trees["drzewoL"]), Math.ceil(emission / trees["drzewoI"]),
+            Math.ceil(emission / trees["stareDrzewoL"]), Math.ceil(emission / trees["stareDrzewoI"]));
+    } else {
+        return createEmissionData(emission, "No park can sustain your CO2 emission", Math.ceil(emission / trees["sadzonka"]),
+            Math.ceil(emission / trees["drzewoL"]), Math.ceil(emission / trees["drzewoI"]),
+            Math.ceil(emission / trees["stareDrzewoL"]), Math.ceil(emission / trees["stareDrzewoI"]));
     }
 }
 

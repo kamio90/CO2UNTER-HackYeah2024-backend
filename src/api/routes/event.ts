@@ -1,10 +1,13 @@
 import express, {Request, Response} from 'express';
 import Event, {IEvent} from "../../domain/models/Event";
+import {calculateEventEmission} from "../../applicaiton/services/calculator-service";
 
 const router = express.Router();
 
 router.post('/events', async (req: Request, res: Response) => {
     const eventData: Partial<IEvent> = req.body;
+    // @ts-ignore
+    eventData.emissions = eventData.attendees * 0.5;
 
     try {
         const event = new Event(eventData);
@@ -68,6 +71,18 @@ router.delete('/events/:eventId', async (req, res) => {
         //@ts-ignore
         res.status(500).send(`Error when deleting event data: ${err.message}`);
     }
+});
+
+router.post('/events/:eventId/calculate', async (req: Request, res: Response): Promise<any> => {
+   try {
+       const event = await Event.findById(req.params.eventId);
+       if(event) {
+           return calculateEventEmission(event);
+       }
+   } catch (err) {
+       //@ts-ignore
+       res.status(404).send(`Error while calculating event CO2 generation: ${err.message}`);
+   }
 });
 
 export default router;
