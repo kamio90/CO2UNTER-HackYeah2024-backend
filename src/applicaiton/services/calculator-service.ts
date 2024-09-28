@@ -76,6 +76,10 @@ function createEmissionData(
     };
 }
 
+function createTransportData(carEmission: number, publicTransportEmission: number, bicycleEmission: number){
+    return {carEmission, publicTransportEmission, bicycleEmission};
+}
+
 export async function calculateEmission(user: IUser): Promise<any> {
     const dayMap = new Map<string, number>();
     dayMap.set("day", 365);
@@ -101,4 +105,15 @@ export async function calculateEmission(user: IUser): Promise<any> {
             Math.ceil(number / trees["drzewoL"]), Math.ceil(number / trees["drzewoI"]),
             Math.ceil(number / trees["stareDrzewoL"]), Math.ceil(number / trees["stareDrzewoI"]));
     }
+}
+
+export async function transportCalc(user: IUser) {
+    const dayMap = new Map<string, number>();
+    dayMap.set("day", 365);
+    dayMap.set("week", 52);
+    dayMap.set("month", 12);
+    const data = createEmissionDictionary();
+    // @ts-ignore
+    let number = data[user.fuelType] * user.distance * dayMap.get(user.timePeriod);
+    return createTransportData(number, 0.014 * user.distance, 0.005 * user.distance)
 }
