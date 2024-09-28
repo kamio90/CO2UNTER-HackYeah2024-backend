@@ -7,6 +7,14 @@ export interface IUser extends Document {
     passengers: number;
     vehicleType: string;
     typeOfMeal: string;
+    waterUsage: number;
+    wasteProduced: number;
+    internetUsage: number;
+    shoppingFrequency: string;
+    energyConsumption: number;
+    leisureActivities: string;
+    travelFrequency: string;
+    dietType: string;
 }
 
 const UserSchema: Schema = new Schema({
@@ -16,6 +24,14 @@ const UserSchema: Schema = new Schema({
     passengers: {type: Number, required: true},
     vehicleType: {type: String, required: true},
     typeOfMeal: {type: String, required: false},
+    waterUsage: {type: Number, required: false},
+    wasteProduced: {type: Number, required: false},
+    internetUsage: {type: Number, required: false},
+    shoppingFrequency: {type: String, required: false},
+    energyConsumption: {type: Number, required: false},
+    leisureActivities: {type: String, required: false},
+    travelFrequency: {type: String, required: false},
+    dietType: {type: String, required: false},
 });
 
 export default mongoose.model<IUser>('User', UserSchema);

@@ -20,7 +20,16 @@ router.post('/user', async (req: Request, res: Response) => {
             distance,
             fuelType,
             passengers,
-            vehicleType
+            vehicleType,
+            typeOfMeal,
+            waterUsage,
+            wasteProduced,
+            internetUsage,
+            shoppingFrequency,
+            energyConsumption,
+            leisureActivities,
+            travelFrequency,
+            dietType
         }: IUser = req.body;
 
         if (!averageConsumption ||
@@ -36,7 +45,16 @@ router.post('/user', async (req: Request, res: Response) => {
                 distance,
                 fuelType,
                 passengers,
-                vehicleType
+                vehicleType,
+                typeOfMeal,
+                waterUsage,
+                wasteProduced,
+                internetUsage,
+                shoppingFrequency,
+                energyConsumption,
+                leisureActivities,
+                travelFrequency,
+                dietType
             });
 
             await user.save();
@@ -61,6 +79,14 @@ router.post('/users/:id/actions', async (req: Request, res: Response) => {
             user.passengers = req.body.passengers;
             user.vehicleType = req.body.vehicleType;
             user.typeOfMeal = req.body.typeOfMeal;
+            user.waterUsage = req.body.waterUsage;
+            user.wasteProduced = req.body.wasteProduced;
+            user.internetUsage = req.body.internetUsage;
+            user.shoppingFrequency = req.body.shoppingFrequency;
+            user.energyConsumption = req.body.energyConsumption;
+            user.leisureActivities = req.body.leisureActivities;
+            user.travelFrequency = req.body.travelFrequency;
+            user.dietType = req.body.dietType;
 
             await user.save();
 
@@ -71,5 +97,6 @@ router.post('/users/:id/actions', async (req: Request, res: Response) => {
         throw new Error(`Error when updating user CO2 emission related info: ${err.message}`);
     }
 });
+
 
 export default router;
