@@ -1,6 +1,6 @@
 import path from "path";
 import fs from "fs/promises";
-import SmallParkSchema from "../../domain/models/SmalPark";
+import SmallParkSchema from "../../domain/models/SmallPark";
 
 async function loadParksData(filename: string): Promise<any[]> {
     const dataFolderPath = path.resolve(__dirname, '../../data');
@@ -23,6 +23,7 @@ export async function importSmallParksData(): Promise<void> {
         accessibility: item.DOSTĘPNOSĆ,
         mpzpDane: item.MPZP_DANE,
         areaHa: item.POW_HA,
+        consumptionCO: item.POW_HA * 3000,
     }));
 
     await SmallParkSchema.deleteMany({});

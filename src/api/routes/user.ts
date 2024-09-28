@@ -1,5 +1,6 @@
 import express, {Request, Response} from 'express';
 import User, {IUser} from "../../domain/models/User";
+import {calculateEmission} from "../../applicaiton/services/calculator-service";
 
 const router = express.Router();
 
@@ -21,6 +22,7 @@ router.post('/user', async (req: Request, res: Response) => {
             fuelType,
             passengers,
             vehicleType,
+            timePeriod,
             typeOfMeal,
             waterUsage,
             wasteProduced,
@@ -46,6 +48,7 @@ router.post('/user', async (req: Request, res: Response) => {
                 fuelType,
                 passengers,
                 vehicleType,
+                timePeriod,
                 typeOfMeal,
                 waterUsage,
                 wasteProduced,
@@ -78,6 +81,7 @@ router.post('/users/:id/actions', async (req: Request, res: Response) => {
             user.fuelType = req.body.fuelType;
             user.passengers = req.body.passengers;
             user.vehicleType = req.body.vehicleType;
+            user.timePeriod = req.body.timePeriod;
             user.typeOfMeal = req.body.typeOfMeal;
             user.waterUsage = req.body.waterUsage;
             user.wasteProduced = req.body.wasteProduced;
@@ -95,6 +99,22 @@ router.post('/users/:id/actions', async (req: Request, res: Response) => {
     } catch (err) {
         //@ts-ignore
         throw new Error(`Error when updating user CO2 emission related info: ${err.message}`);
+    }
+});
+
+router.post('/users/:id/actions/calculate', async (req: Request, res: Response) => {
+    try {
+        const user: IUser | null = await User.findById(req.params.id);
+
+        if (!user) {
+            res.status(404).send('User not found');
+        } else {
+            return calculateEmission(user);
+        }
+
+    } catch (err) {
+        //@ts-ignore
+        throw new Error(`Error when calculating user CO2 emission related info: ${err.message}`);
     }
 });
 

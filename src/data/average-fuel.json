@@ -1,0 +1,15 @@
+[{
+  "fuelType": "diesel",
+  "averageEmission": "0,1698"
+},
+
+{
+  "fuelType": "gasoline",
+  "averageEmission": "0,1639"
+},
+
+{
+  "fuelType": "electric",
+  "averageEmission": "0,6588"
+}
+]

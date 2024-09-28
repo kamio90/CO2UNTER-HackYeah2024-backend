@@ -10,6 +10,7 @@ export interface ISmallPark extends Document {
     accessibility: string;
     mpzpDane: string;
     areaHa: number;
+    consumptionCO: number;
 }
 
 const SmallParkSchema: Schema = new Schema({
@@ -22,6 +23,7 @@ const SmallParkSchema: Schema = new Schema({
     accessibility: {type: String, required: true},
     mpzpDane: {type: String, required: true},
     areaHa: {type: Number, required: true},
+    consumptionCO: {type: Number, required: false}
 });
 
 export default mongoose.model<ISmallPark>('SmallPark', SmallParkSchema);

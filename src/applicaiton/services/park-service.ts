@@ -19,6 +19,7 @@ export async function importParksData(): Promise<void> {
         name: item.Nazwa,
         district: item.Dzielnica,
         areaHa: item.Powierzchnia_ha,
+        consumptionCO: item.Powierzchnia_ha * 3000,
     }));
 
     await Park.deleteMany({});

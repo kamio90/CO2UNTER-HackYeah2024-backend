@@ -6,6 +6,7 @@ export interface IPark extends Document {
     name: string;
     district: string;
     areaHa: number;
+    consumptionCO: number;
 }
 
 const ParkSchema: Schema = new Schema({
@@ -14,6 +15,7 @@ const ParkSchema: Schema = new Schema({
     name: {type: String, required: true},
     district: {type: String, required: true},
     areaHa: {type: Number, required: true},
+    consumptionCO: {type: Number, required: false}
 });
 
 export default mongoose.model<IPark>('Park', ParkSchema);

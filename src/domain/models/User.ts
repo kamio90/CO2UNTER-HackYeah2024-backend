@@ -15,6 +15,7 @@ export interface IUser extends Document {
     leisureActivities: string;
     travelFrequency: string;
     dietType: string;
+    timePeriod: string;
 }
 
 const UserSchema: Schema = new Schema({
@@ -32,6 +33,7 @@ const UserSchema: Schema = new Schema({
     leisureActivities: {type: String, required: false},
     travelFrequency: {type: String, required: false},
     dietType: {type: String, required: false},
+    timePeriod: {type: String, required: true},
 });
 
 export default mongoose.model<IUser>('User', UserSchema);

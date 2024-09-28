@@ -19,6 +19,7 @@ export async function importUsersData(): Promise<void> {
         fuelType: item.fuelType,
         passengers: item.passengers,
         vehicleType: item.vehicleType,
+        timePeriod: item.timePeriod,
     }));
 
     await User.deleteMany({});

@@ -1,5 +1,5 @@
 import express, {Request, Response} from 'express';
-import SmallParkSchema, {ISmallPark} from "../../domain/models/SmalPark";
+import SmallParkSchema, {ISmallPark} from "../../domain/models/SmallPark";
 
 const router = express.Router();
 
