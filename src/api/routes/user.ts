@@ -120,7 +120,6 @@ router.get('/users/:id/actions/calculate', async (req: Request, res: Response): 
         throw new Error(`Error when calculating user CO2 emission related info: ${err.message}`);
     }
     }
-    throw new Error(`ID CANNOT BE NULL`);
 });
 
 router.get('/user/diet', async (req: Request, res: Response): Promise<any> => {
