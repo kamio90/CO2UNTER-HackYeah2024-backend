@@ -103,6 +103,7 @@ router.post('/users/:id/actions', async (req: Request, res: Response) => {
 });
 
 router.get('/users/:id/actions/calculate', async (req: Request, res: Response): Promise<any> => {
+    if(req.params.id){
     try {
         const user: IUser | null = await User.findById(req.params.id);
 
@@ -118,6 +119,8 @@ router.get('/users/:id/actions/calculate', async (req: Request, res: Response): 
         //@ts-ignore
         throw new Error(`Error when calculating user CO2 emission related info: ${err.message}`);
     }
+    }
+    throw new Error(`ID CANNOT BE NULL`);
 });
 
 router.get('/user/diet', async (req: Request, res: Response): Promise<any> => {
