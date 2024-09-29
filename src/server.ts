@@ -11,7 +11,6 @@ import user from "./api/routes/user";
 import bodyParser from "body-parser";
 import serviceSector from "./api/routes/service-sector";
 import event from "./api/routes/event";
-import greenArea from "./api/routes/green-area";
 
 const app = express();
 const port = 3000;
@@ -25,7 +24,6 @@ app.use('/data', smallParks);
 app.use('/data', user);
 app.use("/data", serviceSector);
 app.use("/data", event);
-app.use("/data", greenArea)
 app.use(errorHandler);
 connectToDb().then(async () => {
     app.listen(port, () => {
