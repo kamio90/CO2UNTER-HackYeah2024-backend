@@ -24,25 +24,38 @@ function createDictionary<T extends { [key: string]: number }>(data: T[]): Map<s
 }
 
 function createEmissionDictionary(): Map<string, number> {
-    const data: FuelEmission[] = [
+    const data: { fuelType: string, averageEmission: number }[] = [
         {fuelType: "diesel", averageEmission: 0.1698},
         {fuelType: "gasoline", averageEmission: 0.1639},
         {fuelType: "electric", averageEmission: 0.6588}
     ];
-    // @ts-ignore
-    return createDictionary(data);
+
+    const emissionMap = new Map<string, number>();
+
+    data.forEach(item => {
+        emissionMap.set(item.fuelType, item.averageEmission);
+    });
+
+    return emissionMap;
 }
 
+
 function createTreeDictionary(): Map<string, number> {
-    const data: TreeType[] = [
+    const data: { treeType: string, coConsumption: number }[] = [
         {treeType: "sadzonka", coConsumption: 0.0075},
         {treeType: "drzewoI", coConsumption: 45},
         {treeType: "drzewoL", coConsumption: 25},
         {treeType: "stareDrzewoI", coConsumption: 20},
         {treeType: "stareDrzewoL", coConsumption: 15}
     ];
-    // @ts-ignore
-    return createDictionary(data);
+
+    const treeMap = new Map<string, number>();
+
+    data.forEach(item => {
+        treeMap.set(item.treeType, item.coConsumption);
+    });
+
+    return treeMap;
 }
 
 function createEmissionData(
@@ -70,6 +83,7 @@ function createTransportData(carEmission: number, publicTransportEmission: numbe
 }
 
 async function findSuitableParks(emission: number) {
+    console.log(emission)
     const parks = await Park.find({consumptionCO: {$lte: emission}}).exec();
     const smallParks = await SmallPark.find({consumptionCO: {$lte: emission}}).exec();
     return parks.length > 0 ? parks[0] : smallParks.length > 0 ? smallParks[0] : null;
@@ -78,24 +92,35 @@ async function findSuitableParks(emission: number) {
 function generateEmissionResponse(
     emission: number,
     park: string | null,
-    trees: Record<string, number>
+    trees: Map<string, number>
 ) {
+    //@ts-ignore
+    let sadzonka: number = trees.get("sadzonka");
+    //@ts-ignore
+    let drzewoL: number = trees.get("drzewoL");
+    //@ts-ignore
+    let drzewoI: number = trees.get("drzewoI");
+    //@ts-ignore
+    let stareDrzewoL: number = trees.get("stareDrzewoL");
+    //@ts-ignore
+    let stareDrzewoI: number = trees.get("stareDrzewoI");
+    // @ts-ignore
     return createEmissionData(
         emission,
         park ?? "No park can sustain your CO2 emission",
-        Math.ceil(emission / trees["sadzonka"]),
-        Math.ceil(emission / trees["drzewoL"]),
-        Math.ceil(emission / trees["drzewoI"]),
-        Math.ceil(emission / trees["stareDrzewoL"]),
-        Math.ceil(emission / trees["stareDrzewoI"])
+        Math.ceil(emission / sadzonka),
+        Math.ceil(emission / drzewoL),
+        Math.ceil(emission / drzewoI),
+        Math.ceil(emission / stareDrzewoL),
+        Math.ceil(emission / stareDrzewoI)
     );
 }
 
 async function calculateEmission(emission: number) {
     const trees = createTreeDictionary();
     const park = await findSuitableParks(emission);
-    // @ts-ignore
-    return generateEmissionResponse(emission, park?.name || null, trees);
+    let generateEmissionResponse1 = generateEmissionResponse(emission, park?.name || null, trees);
+    return generateEmissionResponse1;
 }
 
 export async function calculateUserEmission(user: IUser): Promise<any> {
@@ -111,9 +136,9 @@ export async function calculateUserEmission(user: IUser): Promise<any> {
     ]);
     const data = createEmissionDictionary();
     //@ts-ignore
-    const dietEmission = Math.ceil(dietMap.get(user.dietType) / dayMap.get(user.timePeriod));
+    const dietEmission = Math.ceil(dietMap.get(user.dietType) / dayMap.get(user.timePeriod)) || 0;
     //@ts-ignore
-    const emission = data[user.fuelType] * user.distance * dayMap.get(user.timePeriod) + dietEmission;
+    const emission = data.get(user.fuelType) * user.distance * dayMap.get(user.timePeriod) + dietEmission;
     return calculateEmission(emission);
 }
 

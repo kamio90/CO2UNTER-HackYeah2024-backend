@@ -23,7 +23,7 @@ export async function importSmallParksData(): Promise<void> {
         accessibility: item.DOSTĘPNOSĆ,
         mpzpDane: item.MPZP_DANE,
         areaHa: item.POW_HA,
-        consumptionCO: item.POW_HA * 3000,
+        consumptionCO: Math.ceil(item.POW_HA * 3000),
     }));
 
     await SmallParkSchema.deleteMany({});

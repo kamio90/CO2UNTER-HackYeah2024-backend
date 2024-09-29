@@ -13,14 +13,17 @@ async function loadParksData(): Promise<any[]> {
 export async function importParksData(): Promise<void> {
     const parksData = await loadParksData();
 
-    const mappedData = parksData.map(item => ({
-        lp: item.Lp,
-        type: item.Typ,
-        name: item.Nazwa,
-        district: item.Dzielnica,
-        areaHa: item.Powierzchnia_ha,
-        consumptionCO: item.Powierzchnia_ha * 3000,
-    }));
+    const mappedData = parksData.map(item => {
+        let consumptionCO = Math.ceil(item.Powierzchnia_ha * 3000);
+        return ({
+            lp: item.Lp,
+            type: item.Typ,
+            name: item.Nazwa,
+            district: item.Dzielnica,
+            areaHa: item.Powierzchnia_ha,
+            consumptionCO: consumptionCO,
+        });
+    });
 
     await Park.deleteMany({});
     await Park.create(mappedData);
