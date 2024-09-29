@@ -102,7 +102,7 @@ router.post('/users/:id/actions', async (req: Request, res: Response) => {
     }
 });
 
-router.post('/users/:id/actions/calculate', async (req: Request, res: Response): Promise<any> => {
+router.get('/users/:id/actions/calculate', async (req: Request, res: Response): Promise<any> => {
     try {
         const user: IUser | null = await User.findById(req.params.id);
 
