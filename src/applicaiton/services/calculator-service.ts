@@ -104,10 +104,16 @@ export async function calculateUserEmission(user: IUser): Promise<any> {
         ["week", 52],
         ["month", 12]
     ]);
-
+    const dietMap = new Map<string, number>([
+        ["omnivore", 350],
+        ["vegetarian", 225],
+        ['vegan', 125]
+    ]);
     const data = createEmissionDictionary();
     //@ts-ignore
-    const emission = data[user.fuelType] * user.distance * dayMap.get(user.timePeriod);
+    const dietEmission = Math.ceil(dietMap.get(user.dietType) / dayMap.get(user.timePeriod));
+    //@ts-ignore
+    const emission = data[user.fuelType] * user.distance * dayMap.get(user.timePeriod) + dietEmission;
     return calculateEmission(emission);
 }
 
