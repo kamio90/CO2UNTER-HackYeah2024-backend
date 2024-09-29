@@ -57,7 +57,7 @@ router.get('/users/:userId/service-sector', async (req, res) => {
     }
 });
 
-router.post('/users/:userId/service-sectore/calculator', async (req: Request, res: Response): Promise<any> =>{
+router.post('/users/:userId/service-sector/calculate', async (req: Request, res: Response): Promise<any> =>{
     try {
         const serviceSector = await ServiceSector.findOne({userId: req.params.userId});
 
