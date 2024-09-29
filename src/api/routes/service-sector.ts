@@ -66,7 +66,7 @@ router.get('/users/:userId/service-sector/calculate', async (req: Request, res: 
             return;
         }
 
-       return calculateServiceSector(serviceSector);
+       return res.status(200).json(calculateServiceSector(serviceSector));
     } catch (err) {
         //@ts-ignore
         res.status(500).send(`Error when fetching service sector data: ${err.message}`);
