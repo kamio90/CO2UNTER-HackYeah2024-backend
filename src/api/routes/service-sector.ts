@@ -1,5 +1,6 @@
 import express, {Request, Response} from 'express';
 import ServiceSector, {IServiceSector} from "../../domain/models/ServiceSector";
+import {calculateServiceSector} from "../../applicaiton/services/calculator-service";
 
 const router = express.Router();
 
@@ -55,5 +56,22 @@ router.get('/users/:userId/service-sector', async (req, res) => {
         res.status(500).send(`Error when fetching service sector data: ${err.message}`);
     }
 });
+
+router.post('/users/:userId/service-sectore/calculator', async (req: Request, res: Response): Promise<any> =>{
+    try {
+        const serviceSector = await ServiceSector.findOne({userId: req.params.userId});
+
+        if (!serviceSector) {
+            res.status(404).send(`Service sector data for user id ${req.params.userId} not found`);
+            return;
+        }
+
+       return calculateServiceSector(serviceSector);
+    } catch (err) {
+        //@ts-ignore
+        res.status(500).send(`Error when fetching service sector data: ${err.message}`);
+    }
+});
+
 
 export default router;

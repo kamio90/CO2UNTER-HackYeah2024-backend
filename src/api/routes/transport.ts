@@ -18,3 +18,5 @@ router.post('/transport/:id', async (req: Request, res: Response): Promise<any> 
         throw new Error(`Error when calculating emission for public transportation: ${err.message}`);
     }
 });
+
+export default router;

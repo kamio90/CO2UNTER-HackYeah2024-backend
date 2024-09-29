@@ -1,7 +1,8 @@
 import {IUser} from "../../domain/models/User";
 import Park from "../../domain/models/Park";
-import SmalPark from "../../domain/models/SmallPark";
+import SmallPark from "../../domain/models/SmallPark";
 import {IEvent} from "../../domain/models/Event";
+import {IServiceSector} from "../../domain/models/ServiceSector";
 
 type FuelEmission = {
     fuelType: string;
@@ -13,23 +14,26 @@ type TreeType = {
     coConsumption: number;
 };
 
-function createEmissionDictionary(): Record<string, number> {
+function createDictionary<T extends { [key: string]: number }>(data: T[]): Map<string, number> {
+    return data.reduce((dictionary, item) => {
+        const key = Object.keys(item)[0];
+        // @ts-ignore
+        dictionary[key] = item[key];
+        return dictionary;
+    }, {} as Map<string, number>);
+}
+
+function createEmissionDictionary(): Map<string, number> {
     const data: FuelEmission[] = [
         {fuelType: "diesel", averageEmission: 0.1698},
         {fuelType: "gasoline", averageEmission: 0.1639},
         {fuelType: "electric", averageEmission: 0.6588}
     ];
-
-    const dictionary: Record<string, number> = {};
-
-    data.forEach(item => {
-        dictionary[item.fuelType] = item.averageEmission;
-    });
-
-    return dictionary;
+    // @ts-ignore
+    return createDictionary(data);
 }
 
-function createTreeDictionary(): Record<string, number> {
+function createTreeDictionary(): Map<string, number> {
     const data: TreeType[] = [
         {treeType: "sadzonka", coConsumption: 0.0075},
         {treeType: "drzewoI", coConsumption: 45},
@@ -37,17 +41,9 @@ function createTreeDictionary(): Record<string, number> {
         {treeType: "stareDrzewoI", coConsumption: 20},
         {treeType: "stareDrzewoL", coConsumption: 15}
     ];
-
-    const dictionary: Record<string, number> = {};
-
-    data.forEach(item => {
-        dictionary[item.treeType] = item.coConsumption;
-    });
-
-    return dictionary;
+    // @ts-ignore
+    return createDictionary(data);
 }
-
-
 
 function createEmissionData(
     yourEmission: number,
@@ -57,15 +53,7 @@ function createEmissionData(
     drzewoI: number,
     stareDrzewoL: number,
     stareDrzewoI: number
-): {
-    yourEmission: number;
-    park: string;
-    sadzonka: number;
-    drzewoL: number;
-    drzewoI: number;
-    stareDrzewoL: number;
-    stareDrzewoI: number;
-} {
+) {
     return {
         yourEmission,
         park,
@@ -77,65 +65,70 @@ function createEmissionData(
     };
 }
 
-function createTransportData(carEmission: number, publicTransportEmission: number, bicycleEmission: number){
+function createTransportData(carEmission: number, publicTransportEmission: number, bicycleEmission: number) {
     return {carEmission, publicTransportEmission, bicycleEmission};
 }
 
-export async function calculateUserEmission(user: IUser): Promise<any> {
-    const dayMap = new Map<string, number>();
-    dayMap.set("day", 365);
-    dayMap.set("week", 52);
-    dayMap.set("month", 12);
-    const data = createEmissionDictionary();
-    // @ts-ignore
-    let number = data[user.fuelType] * user.distance * dayMap.get(user.timePeriod);
-    const parks = await Park.find({consumptionCO: {$lte: number}}).exec();
-    const smallParks = await SmalPark.find({consumptionCO: {$lte: number}}).exec();
-    const trees = createTreeDictionary();
-    if (parks) {
-        return createEmissionData(number, parks[0].name, Math.ceil(number / trees["sadzonka"]),
-            Math.ceil(number / trees["drzewoL"]), Math.ceil(number / trees["drzewoI"]),
-            Math.ceil(number / trees["stareDrzewoL"]), Math.ceil(number / trees["stareDrzewoI"]));
-    }
-    if (smallParks) {
-        return createEmissionData(number, smallParks[0].name, Math.ceil(number / trees["sadzonka"]),
-            Math.ceil(number / trees["drzewoL"]), Math.ceil(number / trees["drzewoI"]),
-            Math.ceil(number / trees["stareDrzewoL"]), Math.ceil(number / trees["stareDrzewoI"]));
-    } else {
-        return createEmissionData(number, "No park can sustain your CO2 emission", Math.ceil(number / trees["sadzonka"]),
-            Math.ceil(number / trees["drzewoL"]), Math.ceil(number / trees["drzewoI"]),
-            Math.ceil(number / trees["stareDrzewoL"]), Math.ceil(number / trees["stareDrzewoI"]));
-    }
-}
-
-export async function calculateEventEmission(event: IEvent) {
-    const emission = event.emissions;
+async function findSuitableParks(emission: number) {
     const parks = await Park.find({consumptionCO: {$lte: emission}}).exec();
-    const smallParks = await SmalPark.find({consumptionCO: {$lte: emission}}).exec();
-    const trees = createTreeDictionary();
-    if (parks) {
-        return createEmissionData(emission, parks[0].name, Math.ceil(emission / trees["sadzonka"]),
-            Math.ceil(emission / trees["drzewoL"]), Math.ceil(emission / trees["drzewoI"]),
-            Math.ceil(emission / trees["stareDrzewoL"]), Math.ceil(emission / trees["stareDrzewoI"]));
-    }
-    if (smallParks) {
-        return createEmissionData(emission, smallParks[0].name, Math.ceil(emission / trees["sadzonka"]),
-            Math.ceil(emission / trees["drzewoL"]), Math.ceil(emission / trees["drzewoI"]),
-            Math.ceil(emission / trees["stareDrzewoL"]), Math.ceil(emission / trees["stareDrzewoI"]));
-    } else {
-        return createEmissionData(emission, "No park can sustain your CO2 emission", Math.ceil(emission / trees["sadzonka"]),
-            Math.ceil(emission / trees["drzewoL"]), Math.ceil(emission / trees["drzewoI"]),
-            Math.ceil(emission / trees["stareDrzewoL"]), Math.ceil(emission / trees["stareDrzewoI"]));
-    }
+    const smallParks = await SmallPark.find({consumptionCO: {$lte: emission}}).exec();
+    return parks.length > 0 ? parks[0] : smallParks.length > 0 ? smallParks[0] : null;
 }
 
-export async function transportCalc(user: IUser) {
-    const dayMap = new Map<string, number>();
-    dayMap.set("day", 365);
-    dayMap.set("week", 52);
-    dayMap.set("month", 12);
-    const data = createEmissionDictionary();
+function generateEmissionResponse(
+    emission: number,
+    park: string | null,
+    trees: Record<string, number>
+) {
+    return createEmissionData(
+        emission,
+        park ?? "No park can sustain your CO2 emission",
+        Math.ceil(emission / trees["sadzonka"]),
+        Math.ceil(emission / trees["drzewoL"]),
+        Math.ceil(emission / trees["drzewoI"]),
+        Math.ceil(emission / trees["stareDrzewoL"]),
+        Math.ceil(emission / trees["stareDrzewoI"])
+    );
+}
+
+async function calculateEmission(emission: number) {
+    const trees = createTreeDictionary();
+    const park = await findSuitableParks(emission);
     // @ts-ignore
-    let number = data[user.fuelType] * user.distance * dayMap.get(user.timePeriod);
-    return createTransportData(number, 0.014 * user.distance, 0.005 * user.distance)
+    return generateEmissionResponse(emission, park?.name || null, trees);
+}
+
+export async function calculateUserEmission(user: IUser): Promise<any> {
+    const dayMap = new Map<string, number>([
+        ["day", 365],
+        ["week", 52],
+        ["month", 12]
+    ]);
+
+    const data = createEmissionDictionary();
+    //@ts-ignore
+    const emission = data[user.fuelType] * user.distance * dayMap.get(user.timePeriod);
+    return calculateEmission(emission);
+}
+
+export async function calculateEventEmission(event: IEvent): Promise<any> {
+    return calculateEmission(event.emissions);
+}
+
+export async function transportCalc(user: IUser): Promise<any> {
+    const dayMap = new Map<string, number>([
+        ["day", 365],
+        ["week", 52],
+        ["month", 12]
+    ]);
+
+    const data = createEmissionDictionary();
+    //@ts-ignore
+    const carEmission = data[user.fuelType] * user.distance * dayMap.get(user.timePeriod);
+    return createTransportData(carEmission, 0.014 * user.distance, 0.005 * user.distance);
+}
+
+export async function calculateServiceSector(service: IServiceSector): Promise<any> {
+    const emission = service.eatingOutFrequency * 7 + service.hotelUsageFrequency * 25 + service.shoppingFrequency * 2.5;
+    return calculateEmission(emission);
 }
