@@ -1,6 +1,6 @@
 import express, {Request, Response} from 'express';
 import User, {IUser} from "../../domain/models/User";
-import {calculateUserEmission} from "../../applicaiton/services/calculator-service";
+import {calculateUserEmission, showDietEmission} from "../../applicaiton/services/calculator-service";
 
 const router = express.Router();
 
@@ -119,6 +119,11 @@ router.get('/users/:id/actions/calculate', async (req: Request, res: Response): 
         throw new Error(`Error when calculating user CO2 emission related info: ${err.message}`);
     }
 });
+
+router.get('/user/diet', async (req: Request, res: Response): Promise<any> => {
+    const emission = showDietEmission(req.params.diet);
+    return res.status(200).json(emission);
+})
 
 
 export default router;

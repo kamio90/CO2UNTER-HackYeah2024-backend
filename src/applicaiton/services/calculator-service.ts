@@ -4,25 +4,6 @@ import SmallPark from "../../domain/models/SmallPark";
 import {IEvent} from "../../domain/models/Event";
 import {IServiceSector} from "../../domain/models/ServiceSector";
 
-type FuelEmission = {
-    fuelType: string;
-    averageEmission: number;
-};
-
-type TreeType = {
-    treeType: string;
-    coConsumption: number;
-};
-
-function createDictionary<T extends { [key: string]: number }>(data: T[]): Map<string, number> {
-    return data.reduce((dictionary, item) => {
-        const key = Object.keys(item)[0];
-        // @ts-ignore
-        dictionary[key] = item[key];
-        return dictionary;
-    }, {} as Map<string, number>);
-}
-
 function createEmissionDictionary(): Map<string, number> {
     const data: { fuelType: string, averageEmission: number }[] = [
         {fuelType: "diesel", averageEmission: 0.1698},
@@ -119,8 +100,7 @@ function generateEmissionResponse(
 async function calculateEmission(emission: number) {
     const trees = createTreeDictionary();
     const park = await findSuitableParks(emission);
-    let generateEmissionResponse1 = generateEmissionResponse(emission, park?.name || null, trees);
-    return generateEmissionResponse1;
+    return generateEmissionResponse(emission, park?.name || null, trees);
 }
 
 export async function calculateUserEmission(user: IUser): Promise<any> {
@@ -140,6 +120,16 @@ export async function calculateUserEmission(user: IUser): Promise<any> {
     //@ts-ignore
     const emission = data.get(user.fuelType) * user.distance * dayMap.get(user.timePeriod) + dietEmission;
     return calculateEmission(emission);
+}
+
+
+export async function showDietEmission(diet: string): Promise<any> {
+    const dietMap = new Map<string, number>([
+        ["omnivore", 350],
+        ["vegetarian", 225],
+        ['vegan', 125]
+    ]);
+    return dietMap.get(diet);
 }
 
 export async function calculateEventEmission(event: IEvent): Promise<any> {
